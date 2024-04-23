@@ -1,6 +1,6 @@
 ---
 title: "**INSTITUTO NACIONAL DE MEDICINA LEGAL Y CIENCIAS FORENSES**"
-output: 
+output:
   flexdashboard::flex_dashboard:
     logo: "img/logo.png"
     theme:
@@ -13,7 +13,7 @@ output:
         google: Oswald
     orientation: columns
     vertical_layout: scroll
-runtime: shiny    
+output_dir: "docs"  
 ---
 
 ```{r global, echo=FALSE}
