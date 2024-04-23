@@ -1,0 +1,346 @@
+---
+title: "**INSTITUTO NACIONAL DE MEDICINA LEGAL Y CIENCIAS FORENSES**"
+output:
+  flexdashboard::flex_dashboard:
+    logo: "img/logo.png"
+    theme:
+      bg: "#FFFFFF"
+      fg: "#000000" 
+      primary: "#00416A"
+      base_font:
+        google: Prompt
+      code_font:
+        google: Oswald
+    orientation: columns
+    vertical_layout: scroll
+output_dir: "docs"  
+---
+
+```{r global, echo=FALSE}
+source("R/01-instalar-paquetes.R")
+source("R/02-importar-bases-datos.R")
+source("R/03-ajuste-variables.R")
+source("R/04-generacion-tablas.R")
+source("R/05-bases-mapas.R")
+source("R/06-bases-por-departamento.R")
+
+bcasos <-read_csv("data/bcasos.csv")
+names(bcasos) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
+
+bcasosh <-read_csv("data/bcasosh.csv")
+names(bcasosh) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
+
+bcasosm <-read_csv("data/bcasosm.csv")
+names(bcasosm) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
+
+
+```
+
+# Descripción {.sidebar}
+
+**OBSERVATORIO**
+
+**Indicadores**
+
+* Patología
+* Violencia sexual
+* Violencia intrafamiliar
+* Violencia interpersonal
+
+**Nota** :
+
+Es necesario tener en cuenta que:
+
+* La clasificación de los datos que publica el Instituto es de carácter forense
+* El Instituto no tiene competencia jurídica para tipificar delitos, establecer la legalidad o ilegalidad de un hecho, realizar investigaciones judiciales o determinar responsabilidades.
+* Los datos se publican a manera de presunción, por cuanto únicamente mediante las investigaciones realizadas por las autoridades a cargo de las diligencias de los casos se establece con certeza las circunstancias en las que ocurrieron los hechos.
+* Para los reportes de personas desaparecidas: es necesario tener en cuenta la variable "Estado de la desaparición", "apareció vivo", "apareció muerto"  y "continua desaparecido".
+
+<center>
+[Fuente: Medicina Legal](https://www.medicinalegal.gov.co/)
+</center>
+
+<!-- ----------------------------- -->
+
+# Indicadores
+
+Column {data-width=300 .tabset}
+-----------------------------------------------------------------------
+### Muertes 2020-2023 
+```{r}
+bcasos <-read_csv("data/bcasos.csv")
+names(bcasos) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
+knitr::kable(bcasos)
+```
+
+
+### Hombres
+```{r}
+bcasosh <-read_csv("data/bcasosh.csv")
+names(bcasosh) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
+knitr::kable(bcasosh)
+```
+
+### Mujeres
+
+```{r}
+bcasosm <-read_csv("data/bcasosm.csv")
+names(bcasosm) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
+knitr::kable(bcasosm)
+```
+
+Column {data-width=850 .tabset}
+----------------------------------------------------------------------
+### Muertes 2020 - 2023
+
+```{r, fig.width=10, fig.height=12}
+
+library(ggplot2)
+casosCo <- bcasos[,c(1,6)]
+
+# Ordenar los datos por casosh de mayor a menor
+casosCo <- casosCo[order(-casosCo$Total), ]
+
+# Crear una paleta de colores degradada de rojos
+red_palette <- colorRampPalette(c("#FFC685", "#AE123A"))(nrow(casosCo))
+
+# Gráfico de barras
+plot.casos <- ggplot(casosCo, aes(x = reorder(Departamento, Total), y = Total, fill = Total)) + 
+  geom_col() + 
+  geom_text(aes(label = Total), hjust = -0.1, size = 3, color = "gray30") +
+  scale_y_continuous(labels = scales::comma, name = "", expand = expansion(mult = c(0, 0.05))) +
+  scale_fill_gradientn(colors = red_palette, guide = FALSE) +
+  coord_flip() + 
+  theme_minimal() +
+  theme(
+    text = element_text(color = "gray30"),
+    axis.text.y = element_text(size = 10, color = "gray30"),
+    axis.text.x = element_text(size = 10, color = "gray30"),
+    legend.position = "none",
+    plot.margin = margin(1, 1, 1, 1),
+    axis.title = element_text(size = 6)
+  ) +
+  labs(
+    x = "Departamentos",
+    y = "Casos "
+  )
+plot.casos
+```
+
+### Hombres
+
+```{r, fig.width=10, fig.height=12}
+
+library(ggplot2)
+casosCo <- bcasosh[,c(1,6)]
+
+# Ordenar los datos por casosh de mayor a menor
+casosCo <- casosCo[order(-casosCo$Total), ]
+
+# Crear una paleta de colores degradada de rojos
+red_palette <- colorRampPalette(c("#FFC685", "#AE123A"))(nrow(casosCo))
+
+# Gráfico de barras
+plot.casos <- ggplot(casosCo, aes(x = reorder(Departamento, Total), y = Total, fill = Total)) + 
+  geom_col() + 
+  geom_text(aes(label = Total), hjust = -0.1, size = 3, color = "gray30") +
+  scale_y_continuous(labels = scales::comma, name = "", expand = expansion(mult = c(0, 0.05))) +
+  scale_fill_gradientn(colors = red_palette, guide = FALSE) +
+  coord_flip() + 
+  theme_minimal() +
+  theme(
+    text = element_text(color = "gray30"),
+    axis.text.y = element_text(size = 10, color = "gray30"),
+    axis.text.x = element_text(size = 10, color = "gray30"),
+    legend.position = "none",
+    plot.margin = margin(1, 1, 1, 2),
+    axis.title = element_text(size = 6)
+  ) +
+  labs(
+    x = "Departamentos",
+    y = "Casos "
+  )
+plot.casos
+```
+
+
+### Mujeres
+
+```{r, fig.width=10, fig.height=12}
+library(ggplot2)
+casosCo <- bcasosm[,c(1,6)]
+
+# Ordenar los datos por casosh de mayor a menor
+casosCo <- casosCo[order(-casosCo$Total), ]
+
+# Crear una paleta de colores degradada de rojos
+red_palette <- colorRampPalette(c("#FFC685", "#AE123A"))(nrow(casosCo))
+
+# Gráfico de barras
+plot.casos <- ggplot(casosCo, aes(x = reorder(Departamento, Total), y = Total, fill = Total)) + 
+  geom_col() + 
+  geom_text(aes(label = Total), hjust = -0.1, size = 3, color = "gray30") +
+  scale_y_continuous(labels = scales::comma, name = "", expand = expansion(mult = c(0, 0.05))) +
+  scale_fill_gradientn(colors = red_palette, guide = FALSE) +
+  coord_flip() + 
+  theme_minimal() +
+  theme(
+    text = element_text(color = "gray30"),
+    axis.text.y = element_text(size = 10, color = "gray30"),
+    axis.text.x = element_text(size = 10, color = "gray30"),
+    legend.position = "none",
+    plot.margin = margin(1, 1, 1, 2),
+    axis.title = element_text(size = 6)
+  ) +
+  labs(
+    x = "Departamentos",
+    y = "Casos "
+  )
+plot.casos
+```
+
+<!-- -------------------------------------------------------------------------->
+# Antioquia {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r}
+
+```
+
+
+<!-- ---------------------------------------------------------------------->
+# Atlántico  {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Bogotá DC {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Bolivar {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Boyaca {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Caldas {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Caquetá {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Cauca {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Cesar {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Cordoba {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Cundinamarca {data-navmenu="Departamento"}
+
+
+<!-- ---------------------------------------------------------------------->
+# Chocó {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Huila {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# La Guajira {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Magdalena {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+#  {data-navmenu="Departamento"}
+
+
+<!-- ---------------------------------------------------------------------->
+# Meta {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Nariño {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Norte de Santander {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Quindio {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Risaralda {data-navmenu="Departamento"}
+
+
+<!-- ---------------------------------------------------------------------->
+# Santander {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Sucre {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Tolima {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Valle {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Arauca {data-navmenu="Departamento"}
+
+
+<!-- ---------------------------------------------------------------------->
+# Casanare {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Putumayo  {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Amazonas {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Guainia {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# Vaupes {data-navmenu="Departamento"}
+
+
+<!-- ---------------------------------------------------------------------->
+# Vichada {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+# San Andres  {data-navmenu="Departamento"}
+
+<!-- ---------------------------------------------------------------------->
+#  {data-navmenu="Departamento"}
+
+
+<!--------------------------------------------------------------------------->
+# Información
+
+* [**R para epidemiología aplicada y salud pública**](https://epirhandbook.com/es/index.html)
+
+* [**Paquete flexdashboard**](https://pkgs.rstudio.com/flexdashboard/)
+
+* [**Usando flexdashboard**](https://rstudio.github.io/flexdashboard/articles/using.html)
+
+
+
+
