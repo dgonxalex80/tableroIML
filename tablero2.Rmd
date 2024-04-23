@@ -23,38 +23,10 @@ source("R/03-ajuste-variables.R")
 source("R/04-generacion-tablas.R")
 source("R/05-bases-mapas.R")
 source("R/06-bases-por-departamento.R")
-# 
-# bcasos <-read_csv("data/bcasos.csv")
-# names(bcasos) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
-# 
-# bcasosh <-read_csv("data/bcasosh.csv")
-# names(bcasosh) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
-# 
-# bcasosm <-read_csv("data/bcasosm.csv")
-# names(bcasosm) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
+source("R/07-funciones-graficos.R")
 
 #-----------------------------------------------------------------------------
-grafico2 = function(departamento){
-# Crear una paleta de colores entre rojo y naranja
-tabla2 =table(departamento$edadR, departamento$codind)
-barplot(tabla2, las=1 , 
-        col = colorRampPalette(colors = c("#FFC685", "#AE123A"))(5)  , 
-        beside = FALSE,
-        legend.text = c("menos de 1", "01-05", "06-11", "12-17", "18-28"),
-        args.legend = list(x = "topright")
-        )
-grid()}
-# grafico2(antioquia)
-#------------------------------------------------------------------------------
 
-grafico1 = function(departamento) {
-tabla1 =table(departamento$codind)
-
-barplot(tabla1, las=1,
-        col = colorRampPalette(colors = c("#FFC685", "#AE123A"))(10))
-grid()}
-#-------------------------------------------------------------------------------
-# grafico1(antioquia)
 ```
 
 # Descripción {.sidebar}
@@ -108,7 +80,7 @@ Column {data-width=850 .tabset}
 -----------------------------------------------------------------------
 ### Muertes 2020 - 2023
 
-```{r, fig.width=10, fig.height=12}
+```{r, fig.width=10, fig.height=12, warning=FALSE, message=FALSE}
 
 library(ggplot2)
 casosCo <- bcasos[,c(1,6)]
