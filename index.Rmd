@@ -1556,3 +1556,16 @@ ggplot() +
 ```
 
 <!-- ---------------------------------------------------------------------->
+
+<!--------------------------------------------------------------------------->
+# Información
+
+* [**R para epidemiología aplicada y salud pública**](https://epirhandbook.com/es/index.html)
+
+* [**Paquete flexdashboard**](https://pkgs.rstudio.com/flexdashboard/)
+
+* [**Usando flexdashboard**](https://rstudio.github.io/flexdashboard/articles/using.html)
+
+
+
+
