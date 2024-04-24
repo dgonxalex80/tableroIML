@@ -16,24 +16,16 @@ output:
 output_dir: "docs"  
 ---
 
-```{r global, echo=FALSE}
-source("R/01-instalar-paquetes.R")
-source("R/02-importar-bases-datos.R")
-source("R/03-ajuste-variables.R")
-source("R/04-generacion-tablas.R")
-source("R/05-bases-mapas.R")
-source("R/06-bases-por-departamento.R")
+```{r global, echo=FALSE, message=FALSE, warning=FALSE}
+
+source("R/00-menu.R")
 
 bcasos <-read_csv("data/bcasos.csv")
 names(bcasos) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
-
 bcasosh <-read_csv("data/bcasosh.csv")
 names(bcasosh) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
-
 bcasosm <-read_csv("data/bcasosm.csv")
 names(bcasosm) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
-
-
 ```
 
 # Descripción {.sidebar}
@@ -74,19 +66,19 @@ knitr::kable(bcasos)
 ```
 
 
-### Hombres
-```{r}
-bcasosh <-read_csv("data/bcasosh.csv")
-names(bcasosh) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
-knitr::kable(bcasosh)
-```
-
 ### Mujeres
-
 ```{r}
 bcasosm <-read_csv("data/bcasosm.csv")
 names(bcasosm) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
 knitr::kable(bcasosm)
+```
+
+### Hombres
+
+```{r}
+bcasosh <-read_csv("data/bcasosh.csv")
+names(bcasosh) <-c("Departamento", "2020", "2021", "2022", "2023", "Total")
+knitr::kable(bcasosh)
 ```
 
 Column {data-width=850 .tabset}
@@ -94,113 +86,71 @@ Column {data-width=850 .tabset}
 ### Muertes 2020 - 2023
 
 ```{r, fig.width=10, fig.height=12}
-
-library(ggplot2)
-casosCo <- bcasos[,c(1,6)]
-
-# Ordenar los datos por casosh de mayor a menor
-casosCo <- casosCo[order(-casosCo$Total), ]
-
-# Crear una paleta de colores degradada de rojos
-red_palette <- colorRampPalette(c("#FFC685", "#AE123A"))(nrow(casosCo))
-
-# Gráfico de barras
-plot.casos <- ggplot(casosCo, aes(x = reorder(Departamento, Total), y = Total, fill = Total)) + 
-  geom_col() + 
-  geom_text(aes(label = Total), hjust = -0.1, size = 3, color = "gray30") +
-  scale_y_continuous(labels = scales::comma, name = "", expand = expansion(mult = c(0, 0.05))) +
-  scale_fill_gradientn(colors = red_palette, guide = FALSE) +
-  coord_flip() + 
-  theme_minimal() +
-  theme(
-    text = element_text(color = "gray30"),
-    axis.text.y = element_text(size = 10, color = "gray30"),
-    axis.text.x = element_text(size = 10, color = "gray30"),
-    legend.position = "none",
-    plot.margin = margin(1, 1, 1, 1),
-    axis.title = element_text(size = 6)
-  ) +
-  labs(
-    x = "Departamentos",
-    y = "Casos "
-  )
-plot.casos
-```
-
-### Hombres
-
-```{r, fig.width=10, fig.height=12}
-
-library(ggplot2)
-casosCo <- bcasosh[,c(1,6)]
-
-# Ordenar los datos por casosh de mayor a menor
-casosCo <- casosCo[order(-casosCo$Total), ]
-
-# Crear una paleta de colores degradada de rojos
-red_palette <- colorRampPalette(c("#FFC685", "#AE123A"))(nrow(casosCo))
-
-# Gráfico de barras
-plot.casos <- ggplot(casosCo, aes(x = reorder(Departamento, Total), y = Total, fill = Total)) + 
-  geom_col() + 
-  geom_text(aes(label = Total), hjust = -0.1, size = 3, color = "gray30") +
-  scale_y_continuous(labels = scales::comma, name = "", expand = expansion(mult = c(0, 0.05))) +
-  scale_fill_gradientn(colors = red_palette, guide = FALSE) +
-  coord_flip() + 
-  theme_minimal() +
-  theme(
-    text = element_text(color = "gray30"),
-    axis.text.y = element_text(size = 10, color = "gray30"),
-    axis.text.x = element_text(size = 10, color = "gray30"),
-    legend.position = "none",
-    plot.margin = margin(1, 1, 1, 2),
-    axis.title = element_text(size = 6)
-  ) +
-  labs(
-    x = "Departamentos",
-    y = "Casos "
-  )
-plot.casos
+grafico3(bcasos)
 ```
 
 
 ### Mujeres
 
 ```{r, fig.width=10, fig.height=12}
-library(ggplot2)
-casosCo <- bcasosm[,c(1,6)]
-
-# Ordenar los datos por casosh de mayor a menor
-casosCo <- casosCo[order(-casosCo$Total), ]
-
-# Crear una paleta de colores degradada de rojos
-red_palette <- colorRampPalette(c("#FFC685", "#AE123A"))(nrow(casosCo))
-
-# Gráfico de barras
-plot.casos <- ggplot(casosCo, aes(x = reorder(Departamento, Total), y = Total, fill = Total)) + 
-  geom_col() + 
-  geom_text(aes(label = Total), hjust = -0.1, size = 3, color = "gray30") +
-  scale_y_continuous(labels = scales::comma, name = "", expand = expansion(mult = c(0, 0.05))) +
-  scale_fill_gradientn(colors = red_palette, guide = FALSE) +
-  coord_flip() + 
-  theme_minimal() +
-  theme(
-    text = element_text(color = "gray30"),
-    axis.text.y = element_text(size = 10, color = "gray30"),
-    axis.text.x = element_text(size = 10, color = "gray30"),
-    legend.position = "none",
-    plot.margin = margin(1, 1, 1, 2),
-    axis.title = element_text(size = 6)
-  ) +
-  labs(
-    x = "Departamentos",
-    y = "Casos "
-  )
-plot.casos
+grafico3(bcasosm)
 ```
 
-<!-- -------------------------------------------------------------------------->
+### Hombres
+
+```{r, fig.width=10, fig.height=12}
+grafico3(bcasosh)
+```
+
+<!-- ===================================================================== -->
 # Antioquia {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(antioquia)
+```
+
+
+```{r, fig.align='center'}
+grafico2(antioquia)
+```
+
+
+```{r, fig.align='center'}
+ant <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Antioquia")
+
+ggplot() +
+  geom_sf(data=ant, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
+
+<!-- ---------------------------------------------------------------------->
+# Atlántico  {data-navmenu="Departamento"}
 
 Column {data-width=300 .tabset}
 ----------------------------------------------------------------------
@@ -222,125 +172,1387 @@ Column {data-width=300 .tabset}
 Column {data-width=650 .tabset}
 ----------------------------------------------------------------------
 
-```{r}
+```{r, fig.align='center'}
+grafico1(atlantico)
+```
+
+
+```{r, fig.align='center'}
+grafico2(atlantico)
+```
+
+
+```{r, fig.align='center'}
+atl <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Atlántico")
+
+ggplot() +
+  geom_sf(data=atl, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
 
 ```
 
 
 <!-- ---------------------------------------------------------------------->
-# Atlántico  {data-navmenu="Departamento"}
-
-<!-- ---------------------------------------------------------------------->
 # Bogotá DC {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(bogota)
+```
+
+
+```{r, fig.align='center'}
+grafico2(bogota)
+```
+
+
+```{r, fig.align='center'}
+# dptpant <- COLmun %>% 
+#           dplyr::filter(NAME_1 == "Antioquia")
+# 
+# ggplot() +
+#   geom_sf(data=ant, aes(fill = ID_2), color = "black", size = 0.25) +
+#   theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+#   scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+#   labs(title=" ", x = " ", y = " ")
+
+```
 
 <!-- ---------------------------------------------------------------------->
 # Bolivar {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(bolivar)
+```
+
+
+```{r, fig.align='center'}
+grafico2(bolivar)
+```
+
+
+```{r, fig.align='center'}
+bol <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Bolívar")
+
+ggplot() +
+  geom_sf(data=bol, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
+
 <!-- ---------------------------------------------------------------------->
 # Boyaca {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(boyaca)
+```
+
+
+```{r, fig.align='center'}
+grafico2(boyaca)
+```
+
+
+```{r, fig.align='center'}
+boy <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Boyacá ")
+
+ggplot() +
+  geom_sf(data=boy, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
 
 <!-- ---------------------------------------------------------------------->
 # Caldas {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(caldas)
+```
+
+
+```{r, fig.align='center'}
+grafico2(caldas)
+```
+
+
+```{r, fig.align='center'}
+cal <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Caldas")
+
+ggplot() +
+  geom_sf(data=cal, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
 # Caquetá {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(caqueta)
+```
+
+
+```{r, fig.align='center'}
+grafico2(caqueta)
+```
+
+
+```{r, fig.align='center'}
+caq <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Caquetá")
+
+ggplot() +
+  geom_sf(data=caq, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
 
 <!-- ---------------------------------------------------------------------->
 # Cauca {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(cauca)
+```
+
+
+```{r, fig.align='center'}
+grafico2(cauca)
+```
+
+
+```{r, fig.align='center'}
+cau <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Cauca")
+
+ggplot() +
+  geom_sf(data=cau, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
 # Cesar {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(cesar)
+```
+
+
+```{r, fig.align='center'}
+grafico2(cesar)
+```
+
+
+```{r, fig.align='center'}
+ces <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Cesar")
+
+ggplot() +
+  geom_sf(data=ces, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
 
 <!-- ---------------------------------------------------------------------->
 # Cordoba {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(cordoba)
+```
+
+
+```{r, fig.align='center'}
+grafico2(cordoba)
+```
+
+
+```{r, fig.align='center'}
+cor <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Córdoba")
+
+ggplot() +
+  geom_sf(data=ant, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
 # Cundinamarca {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(cundinamarca)
+```
+
+
+```{r, fig.align='center'}
+grafico2(cundinamarca)
+```
+
+
+```{r, fig.align='center'}
+cun <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Cundinamarca")
+
+ggplot() +
+  geom_sf(data=cun, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 
 
 <!-- ---------------------------------------------------------------------->
 # Chocó {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(choco)
+```
+
+
+```{r, fig.align='center'}
+grafico2(choco)
+```
+
+
+```{r, fig.align='center'}
+cho <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Chocó")
+
+ggplot() +
+  geom_sf(data=cho, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
 # Huila {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(huila)
+```
+
+
+```{r, fig.align='center'}
+grafico2(huila)
+```
+
+
+```{r, fig.align='center'}
+hui <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Huila")
+
+ggplot() +
+  geom_sf(data=hui, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
 
 <!-- ---------------------------------------------------------------------->
 # La Guajira {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(guajira)
+```
+
+
+```{r, fig.align='center'}
+grafico2(guajira)
+```
+
+
+```{r, fig.align='center'}
+gua <- COLmun %>% 
+          dplyr::filter(NAME_1 == "La Guajira")
+
+ggplot() +
+  geom_sf(data=gua, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
 # Magdalena {data-navmenu="Departamento"}
 
-<!-- ---------------------------------------------------------------------->
-#  {data-navmenu="Departamento"}
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(magdalena)
+```
 
 
+```{r, fig.align='center'}
+grafico2(magdalena)
+```
+
+
+```{r, fig.align='center'}
+mag <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Magdalena")
+
+ggplot() +
+  geom_sf(data=mag, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
+
 # Meta {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(meta)
+```
+
+
+```{r, fig.align='center'}
+grafico2(meta)
+```
+
+
+```{r, fig.align='center'}
+met <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Meta")
+
+ggplot() +
+  geom_sf(data=met, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
 
 <!-- ---------------------------------------------------------------------->
 # Nariño {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(narino)
+```
+
+
+```{r, fig.align='center'}
+grafico2(narino)
+```
+
+
+```{r, fig.align='center'}
+nar <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Nariño")
+
+ggplot() +
+  geom_sf(data=nar, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
 # Norte de Santander {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(nsantander)
+```
+
+
+```{r, fig.align='center'}
+grafico2(nsantander)
+```
+
+
+```{r, fig.align='center'}
+nsan <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Norte de Santander")
+
+ggplot() +
+  geom_sf(data=nsan, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
 
 <!-- ---------------------------------------------------------------------->
 # Quindio {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(quindio)
+```
+
+
+```{r, fig.align='center'}
+grafico2(quindio)
+```
+
+
+```{r, fig.align='center'}
+qui <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Quindío")
+
+ggplot() +
+  geom_sf(data=qui, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
 # Risaralda {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(risaralda)
+```
+
+
+```{r, fig.align='center'}
+grafico2(risaralda)
+```
+
+
+```{r, fig.align='center'}
+ris <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Risaralda")
+
+ggplot() +
+  geom_sf(data=ris, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
 
 <!-- ---------------------------------------------------------------------->
 # Santander {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(santander)
+```
+
+
+```{r, fig.align='center'}
+grafico2(santander)
+```
+
+
+```{r, fig.align='center'}
+san <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Santander")
+
+ggplot() +
+  geom_sf(data=san, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
 # Sucre {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(sucre)
+```
+
+
+```{r, fig.align='center'}
+grafico2(sucre)
+```
+
+
+```{r, fig.align='center'}
+suc <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Sucre")
+
+ggplot() +
+  geom_sf(data=suc, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
 
 <!-- ---------------------------------------------------------------------->
 # Tolima {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(tolima)
+```
+
+
+```{r, fig.align='center'}
+grafico2(tolima)
+```
+
+
+```{r, fig.align='center'}
+tol <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Antioquia")
+
+ggplot() +
+  geom_sf(data=tol, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
 # Valle {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(valle)
+```
+
+
+```{r, fig.align='center'}
+grafico2(valle)
+```
+
+
+```{r, fig.align='center'}
+val <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Valle del Cauca")
+
+ggplot() +
+  geom_sf(data=val, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
 
 <!-- ---------------------------------------------------------------------->
 # Arauca {data-navmenu="Departamento"}
 
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(arauca)
+```
+
+
+```{r, fig.align='center'}
+grafico2(arauca)
+```
+
+
+```{r, fig.align='center'}
+ara <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Arauca")
+
+ggplot() +
+  geom_sf(data=ara, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
 # Casanare {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(casanare)
+```
+
+
+```{r, fig.align='center'}
+grafico2(casanare)
+```
+
+
+```{r, fig.align='center'}
+cas <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Casanare")
+
+ggplot() +
+  geom_sf(data=cas, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
 
 <!-- ---------------------------------------------------------------------->
 # Putumayo  {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(putumayo)
+```
+
+
+```{r, fig.align='center'}
+grafico2(putumayo)
+```
+
+
+```{r, fig.align='center'}
+put <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Putumayo")
+
+ggplot() +
+  geom_sf(data=put, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
 # Amazonas {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(amazonas)
+```
+
+
+```{r, fig.align='center'}
+grafico2(amazonas)
+```
+
+
+```{r, fig.align='center'}
+ama <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Amazonas")
+
+ggplot() +
+  geom_sf(data=ama, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
 
 <!-- ---------------------------------------------------------------------->
 # Guainia {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(guainia)
+```
+
+
+```{r, fig.align='center'}
+grafico2(guainia)
+```
+
+
+```{r, fig.align='center'}
+gua <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Guainía")
+
+ggplot() +
+  geom_sf(data=gua, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
 # Vaupes {data-navmenu="Departamento"}
+
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(vaupes)
+```
+
+
+```{r, fig.align='center'}
+grafico2(vaupes)
+```
+
+
+```{r, fig.align='center'}
+vau <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Vaupés")
+
+ggplot() +
+  geom_sf(data=vau, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
 
 
 <!-- ---------------------------------------------------------------------->
 # Vichada {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(vichada)
+```
+
+
+```{r, fig.align='center'}
+grafico2(vichada)
+```
+
+
+```{r, fig.align='center'}
+vic <- COLmun %>% 
+          dplyr::filter(NAME_1 == "Vichada")
+
+ggplot() +
+  geom_sf(data=vic, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
 # San Andres  {data-navmenu="Departamento"}
 
+Column {data-width=300 .tabset}
+----------------------------------------------------------------------
+### Indicadores
+
+|código | indicador                                                 |
+|:------|:----------------------------------------------------------|
+|72     |muertes por causas externas en niños, niñas y adolescentes |
+|73     |homicidios en niños, niñas y adolescentes                  |
+|74     |suicidios en niños, niñas y adolescentes                   |
+|75     |muertes por otros accidentes en niños, niñas y adolescentes|
+|76     |muertes por accidentes de transporte en niños, niñas y adolescentes|
+|110    |muertes por causa externa (18 - 28 años)|
+|111    |homicidios (18 - 28 años)|
+|112    |suicidios (18 - 28 años)|
+|113    |otros accidentes (18 - 28 años)|
+|114    |accidentes de transporte (18 - 28 años)|
+
+Column {data-width=650 .tabset}
+----------------------------------------------------------------------
+
+```{r, fig.align='center'}
+grafico1(sanandres)
+```
+
+
+```{r, fig.align='center'}
+grafico2(sanandres)
+```
+
+
+```{r, fig.align='center'}
+sand  <- COLmun %>% 
+          dplyr::filter(NAME_1 == "San Andrés y Providencia")
+
+ggplot() +
+  geom_sf(data=sand, aes(fill = ID_2), color = "black", size = 0.25) +
+  theme(aspect.ratio=1, axis.text.x = element_blank(), axis.text.y = element_blank())+
+  scale_fill_distiller(name="Casos", palette = "YlOrRd", breaks = scales::pretty_breaks(n = 5))+
+  labs(title=" ", x = " ", y = " ")
+
+```
+
 <!-- ---------------------------------------------------------------------->
-#  {data-navmenu="Departamento"}
-
-
-<!--------------------------------------------------------------------------->
-# Información
-
-* [**R para epidemiología aplicada y salud pública**](https://epirhandbook.com/es/index.html)
-
-* [**Paquete flexdashboard**](https://pkgs.rstudio.com/flexdashboard/)
-
-* [**Usando flexdashboard**](https://rstudio.github.io/flexdashboard/articles/using.html)
-
-
-
-

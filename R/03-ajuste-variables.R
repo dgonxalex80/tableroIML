@@ -48,6 +48,12 @@ Ind20_23 <- rbind(Ind2020,
                   Ind2023)
 
 
+Ind20_23$edadR[Ind20_23$edadR == "Menores de un año"] = 1
+Ind20_23$edadR[Ind20_23$edadR == "(01 a 05)"] =2
+Ind20_23$edadR[Ind20_23$edadR == "(06 a 11)"] =3
+Ind20_23$edadR[Ind20_23$edadR == "(12 a 17)"] =4
+Ind20_23$edadR[Ind20_23$edadR == "(18 a 28)"] =5
+
 
 Ind2020$edadR[Ind2020$edadR == "Menores de un año"] = 1
 Ind2020$edadR[Ind2020$edadR == "(01 a 05)"] =2
@@ -85,3 +91,4 @@ write_csv(Ind2023, "data/Ind2023.csv")
 write_csv(Ind2022, "data/Ind2022.csv")
 write_csv(Ind2021, "data/Ind2021.csv")
 write_csv(Ind2020, "data/Ind2020.csv")
+

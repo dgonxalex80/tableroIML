@@ -15,3 +15,4 @@ casos2020_2023 <-data.frame(casos = c(casos, casosm, casosh),
 casos20_23 <- data.frame(casos, casosm, casosh)
 rownames(casos20_23) <-  c(2020,2021,2022, 2023)
 names(casos20_23) <- c("Total", "Mujeres", "Hombres")
+
