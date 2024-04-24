@@ -1566,6 +1566,18 @@ ggplot() +
 
 * [**Usando flexdashboard**](https://rstudio.github.io/flexdashboard/articles/using.html)
 
+<br/><br/>
 
+Para clonar el repositorio
+
+En RStudio
+
+* File/ New Project...
+* Version Control ..
+* Ctrl + v :  https://github.com/dgonxalex80/tableroIML.git
+ 
+ 
+ Tablero : https://dgonxalex80.github.io/tableroIML/
+ 
 
 
